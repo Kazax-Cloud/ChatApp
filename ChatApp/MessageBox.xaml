@@ -1,0 +1,16 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style TargetType="TextBox" x:Key="MessageBox">
+        <Setter Property="Template">
+            <Setter.Value >
+                <ControlTemplate>
+                    <TextBox>
+                        <TextBox.InputBindings>
+                        <KeyBinding Command="{Binding SendCommand}" Key="Return"/>
+                        </TextBox.InputBindings>
+                    </TextBox>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

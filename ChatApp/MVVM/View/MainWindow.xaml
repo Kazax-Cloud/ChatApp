@@ -1,0 +1,181 @@
+﻿<Window x:Class="ChatApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ChatApp"
+        xmlns:viewmodel="clr-namespace:ChatClient.MVVM.ViewModel"
+        mc:Ignorable="d"
+        WindowStyle="None"
+        Title="MainWindow" Height="650" Width="1200"
+        WindowStartupLocation="CenterScreen"
+        AllowsTransparency="True"
+        ResizeMode="CanResizeWithGrip"
+        Background="#364F6B">
+
+    <Window.DataContext>
+        <viewmodel:MainViewModel/>
+    </Window.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <!--Верхняя панель(свернуть, закрыть, раскрыть)-->
+        <Border Height="25"
+                Grid.ColumnSpan="2" 
+                Background="#393E46"
+                MouseDown="Border_MouseDown"
+            >
+            <!--Названиен чата-->
+            <Grid HorizontalAlignment="Stretch">
+                <Label Content="Twirk"
+                       Foreground="DarkGray"
+                       FontFamily="Segoe UI Variable"
+                       FontSize="14"
+                       FontWeight="SemiBold"
+                    />
+                <!--Кнопки Выхода, Расширения, Сворачивания-->
+                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal"
+                            
+                    >
+                    <!--Свернуть-->
+                    <Button Width="25px" Height="20px" 
+                            Content="___" Background="Transparent"
+                            BorderThickness="0" FontWeight="Black"
+                            Foreground="#F5F5F5"
+                            Margin="0 0 0 5"
+                            Click="Button_Click_Minimize"
+                        />
+
+                    <!--Развернуть-->
+                    <Button Width="25px" Height="25px" 
+                            Content="☐" Background="Transparent"
+                            BorderThickness="0" FontWeight="Black"
+                            Foreground="#F5F5F5"
+                            Click="Button_Click_Maximazed"
+                        />
+                    <!--Выход-->
+                    <Button Width="25px" Height="25px" 
+                            Content="✕" Background="Transparent"
+                            BorderThickness="0" FontWeight="Black"
+                            Foreground="#F5F5F5"
+                            Click="Button_Click_Close"
+                        />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="1" Background="#252A34" 
+                   >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+
+            
+                <TextBox Background="White" Foreground="#00ADB5" Height="25px" VerticalAlignment="Top" Margin="0 5 0 0" MaxLength="25"
+                     Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
+                     ToolTip="Максимально 25 символов"
+                         />
+            
+            <Button Height="25px" VerticalAlignment="Bottom"
+                    Content="Connect"
+                    Command="{Binding ConnectToServerCommand}"
+                />
+
+            <Label BorderBrush="Transparent" Grid.Row="1"
+                   Content="Контакты:" VerticalAlignment="Center" HorizontalAlignment="Left"
+                   Foreground="#00ADB5" FontWeight="Medium" FontSize="20"
+                   Margin="5 0 0 0"
+                   BorderThickness="0"
+                />
+
+            <ListView ItemsSource="{Binding Users}"  BorderBrush="Transparent"  Background="#252A34" Foreground="#00ADB5" Grid.Row="2">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Username}"/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+
+            </ListView>
+            
+
+            <!--НИжняя панель с Username-->
+            <StackPanel Grid.Row="3" Orientation="Horizontal"  VerticalAlignment="Bottom"
+                        Background="#393E46" 
+                        Height="40"
+                >
+
+                <Border Width="30" Height="30"
+                        Background="#3bff6f"
+                        CornerRadius="25"
+                        Margin="12 0 0 0"/>
+                <StackPanel VerticalAlignment="Center"
+                    >
+                    <Label Content="{Binding Username}"
+                           Foreground="White"
+                           FontWeight="SemiBold"
+                           Margin="0 0 0 -2"
+                           FontSize="14"
+                        />
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+
+
+        <Grid Grid.Column="1" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition/>
+                <RowDefinition Height="70"/>
+            </Grid.RowDefinitions>
+
+            <!--Верхний бордер-->
+            <Border Background="#FF323436">
+                <Grid HorizontalAlignment="Stretch">
+                    <Label Content="{Binding Username}" VerticalContentAlignment="Center"
+                           Foreground="White"
+                           FontSize="15"
+                           Margin="8"
+                           FontWeight="SemiBold"
+                        />
+                </Grid>
+            </Border>
+
+            <ListView Grid.Row="1" Margin="8"
+                       Foreground="White"
+                       Background="Transparent"  BorderThickness="0"
+                      ItemsSource="{Binding Messages}" />
+
+            <Grid Grid.Row="2" Background="#393E46">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="90"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBox Grid.Row="1"  Grid.ColumnSpan="2"
+                         Height="50" Margin="8"
+                         Background="#3e4147" FontSize="18px" FontWeight="Medium" Foreground="#3FC1C9" CaretBrush="#3FC1C9"
+                         BorderBrush="White" BorderThickness="2"
+                         Text="{Binding Message, UpdateSourceTrigger=PropertyChanged}"
+                         />
+                <Button Grid.Column="1"
+                        Content="send"
+                        Foreground="#00ADB5"
+                        FontSize="18"
+                        Command="{Binding SendMessageCommand}"
+                        />
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
