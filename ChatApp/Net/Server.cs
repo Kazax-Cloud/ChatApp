@@ -8,8 +8,9 @@ namespace ChatClient.Net
     class Server
     {
         TcpClient _client;
+        //Чтение пакетов
         public PacketReader PacketReader;
-
+        //События (подлючеения, отправления сообщения и отключения)
         public event Action connectedEvent;
         public event Action msgReceievedEvent;
         public event Action userDiscinnectEvent;
@@ -18,7 +19,7 @@ namespace ChatClient.Net
         {
             _client = new TcpClient();
         }
-
+        //не подключен ли к серверу и подключение
         public void ConnectToServer(string username)
         {
             if (!_client.Connected)
@@ -29,7 +30,8 @@ namespace ChatClient.Net
                 PacketReader = new PacketReader(_client.GetStream());
 
                 if (!string.IsNullOrEmpty(username))
-                {
+                {   
+                    //отправляем пакет данных на сервак
                     var connectPacket = new PacketBuilder();
 
                     connectPacket.WriteOpCode(0);
@@ -43,6 +45,7 @@ namespace ChatClient.Net
 
         }
 
+        //Загружаем данные в разные потоки
         private void ReadPackets()
         {
             Task.Run(() =>
@@ -70,6 +73,7 @@ namespace ChatClient.Net
             });
         }
 
+        //показывает введенное сообщение 
         public void SendMessageToServer(string message)
         {
             var messagePacket = new PacketBuilder();

@@ -4,6 +4,7 @@ using System.Text;
 
 namespace ChatClient.Net.IO
 {
+    //Добавляем данные в поток памяти 
     class PacketBuilder
     {
         MemoryStream _ms;
@@ -16,7 +17,7 @@ namespace ChatClient.Net.IO
         {
             _ms.WriteByte(opcode);
         }
-
+        //Получаем данные в байтах и отпраем их на сервер
         public void WriteMessage(string msg)
         {
             var msgLenght = msg.Length;

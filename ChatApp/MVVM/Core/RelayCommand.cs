@@ -3,6 +3,7 @@ using System;
 
 namespace ChatClient.MVVM.Core
 {
+    //Трансляцмя(реле) 
     public class RelayCommand : ICommand
     {
         private Action<object> execute;

@@ -12,6 +12,7 @@ namespace ChatClient.MVVM.ViewModel
     class MainViewModel
     {
         public ObservableCollection<UserModel> Users { get; set; }
+        //отправка сообщения
         public ObservableCollection<String> Messages { get; set; }
         public RelayCommand ConnectToServerCommand { get; set; }
 
@@ -30,23 +31,27 @@ namespace ChatClient.MVVM.ViewModel
             _server.msgReceievedEvent += MessegeReceived;
             _server.userDiscinnectEvent += RemoveUser;
 
+            //если строка пуста, то нельзя подключчиться 
             ConnectToServerCommand = new RelayCommand(a => _server.ConnectToServer(Username), o => !string.IsNullOrEmpty(Username));
             SendMessageCommand = new RelayCommand(a => _server.SendMessageToServer(Message), o => !string.IsNullOrEmpty(Message));
         }
 
         private void RemoveUser()
         {
+            //Коллекиця пользователей
             var uid = _server.PacketReader.ReadMessage();
             var user = Users.Where(x => x.UID == uid).FirstOrDefault();
+            //Удаляем пользователя из коллекцции
             Application.Current.Dispatcher.Invoke(() => Users.Remove(user));
         }
 
         private void MessegeReceived()
         {
             var msg = _server.PacketReader.ReadMessage();
+            //Коллекция сообщений
             Application.Current.Dispatcher.Invoke(() => Messages.Add(msg));
         }
-
+        
         private void UserConnected()
         {
             var user = new UserModel
@@ -60,6 +65,5 @@ namespace ChatClient.MVVM.ViewModel
                 Application.Current.Dispatcher.Invoke(() => Users.Add(user));
             }
         }
-
     }
 }

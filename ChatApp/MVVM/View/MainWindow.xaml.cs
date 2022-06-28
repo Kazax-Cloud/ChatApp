@@ -43,12 +43,6 @@ namespace ChatApp
             Application.Current.Shutdown();
         }
 
-        private void UserStatus()
-        {
-            if (true)
-            {
-                
-            }
-        }
+      
     }
 }
